@@ -7,45 +7,53 @@ public class GradeCalculatorGUI {
     public static void main(String[] args) {
         // Create main frame
         JFrame frame = new JFrame("Student Grade Calculator");
-        frame.setSize(400, 300);
+        frame.setSize(400, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null);
+        frame.setLocationRelativeTo(null); // center the window
 
-        // Set background color of the frame
-        frame.getContentPane().setBackground(new Color(230, 240, 255)); // light soft blueish background
+        // Use a panel with GridBagLayout to center everything
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(new Color(230, 240, 255)); // light soft blueish background
+        frame.add(panel);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // spacing between components
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Label for instructions
         JLabel label = new JLabel("Enter marks for 3 subjects:");
-        label.setBounds(50, 20, 300, 25);
-        frame.add(label);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2; // span two columns
+        panel.add(label, gbc);
 
         // Text fields for marks
-        JTextField mark1 = new JTextField();
-        mark1.setBounds(50, 50, 100, 25);
-        frame.add(mark1);
+        JTextField mark1 = new JTextField(10);
+        gbc.gridy = 1;
+        panel.add(mark1, gbc);
 
-        JTextField mark2 = new JTextField();
-        mark2.setBounds(50, 80, 100, 25);
-        frame.add(mark2);
+        JTextField mark2 = new JTextField(10);
+        gbc.gridy = 2;
+        panel.add(mark2, gbc);
 
-        JTextField mark3 = new JTextField();
-        mark3.setBounds(50, 110, 100, 25);
-        frame.add(mark3);
+        JTextField mark3 = new JTextField(10);
+        gbc.gridy = 3;
+        panel.add(mark3, gbc);
 
         // Button to calculate grade
         JButton calculateBtn = new JButton("Calculate");
-        calculateBtn.setBounds(50, 150, 120, 30);
-
-        // Set button colors
         calculateBtn.setBackground(new Color(0, 102, 204)); // bright blue
         calculateBtn.setForeground(Color.WHITE); // white text
         calculateBtn.setFocusPainted(false); // remove focus border
-        frame.add(calculateBtn);
+        gbc.gridy = 4;
+        panel.add(calculateBtn, gbc);
 
         // Label for results
         JLabel resultLabel = new JLabel("");
-        resultLabel.setBounds(50, 190, 300, 50);
-        frame.add(resultLabel);
+        resultLabel.setHorizontalAlignment(JLabel.CENTER);
+        gbc.gridy = 5;
+        panel.add(resultLabel, gbc);
 
         // Action for button click
         calculateBtn.addActionListener(new ActionListener() {
