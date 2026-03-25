@@ -1,49 +1,80 @@
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
-public class GradeCalculator {
-
-    // Method to calculate grade based on average
-    public static String getGrade(double average) {
-        if (average >= 80) return "A";
-        else if (average >= 70) return "B";
-        else if (average >= 60) return "C";
-        else if (average >= 50) return "D";
-        else return "E";
-    }
-
-    // Method to check pass or fail
-    public static String getStatus(double average) {
-        return (average >= 50) ? "PASS" : "FAIL";
-    }
+public class GradeCalculatorGUI {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        // Create main frame
+        JFrame frame = new JFrame("Student Grade Calculator");
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null);
 
-        System.out.println("===== STUDENT GRADE CALCULATOR =====");
+        // Set background color of the frame
+        frame.getContentPane().setBackground(new Color(230, 240, 255)); // light soft blueish background
 
-        // Input number of subjects
-        System.out.print("Enter number of subjects: ");
-        int subjects = scanner.nextInt();
+        // Label for instructions
+        JLabel label = new JLabel("Enter marks for 3 subjects:");
+        label.setBounds(50, 20, 300, 25);
+        frame.add(label);
 
-        double total = 0;
+        // Text fields for marks
+        JTextField mark1 = new JTextField();
+        mark1.setBounds(50, 50, 100, 25);
+        frame.add(mark1);
 
-        // Input marks for each subject
-        for (int i = 1; i <= subjects; i++) {
-            System.out.print("Enter marks for subject " + i + ": ");
-            double mark = scanner.nextDouble();
-            total += mark;
-        }
+        JTextField mark2 = new JTextField();
+        mark2.setBounds(50, 80, 100, 25);
+        frame.add(mark2);
 
-        // Calculations
-        double average = total / subjects;
-        String grade = getGrade(average);
-        String status = getStatus(average);
+        JTextField mark3 = new JTextField();
+        mark3.setBounds(50, 110, 100, 25);
+        frame.add(mark3);
 
-        // Output
-        System.out.println("\n----- RESULTS -----");
-        System.out.println("Total Marks: " + total);
-        System.out.println("Average: " + average);
-        System.out.println("Final Grade: " + grade);
-        System.out.println("Status: " + status);
+        // Button to calculate grade
+        JButton calculateBtn = new JButton("Calculate");
+        calculateBtn.setBounds(50, 150, 120, 30);
+
+        // Set button colors
+        calculateBtn.setBackground(new Color(0, 102, 204)); // bright blue
+        calculateBtn.setForeground(Color.WHITE); // white text
+        calculateBtn.setFocusPainted(false); // remove focus border
+        frame.add(calculateBtn);
+
+        // Label for results
+        JLabel resultLabel = new JLabel("");
+        resultLabel.setBounds(50, 190, 300, 50);
+        frame.add(resultLabel);
+
+        // Action for button click
+        calculateBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double m1 = Double.parseDouble(mark1.getText());
+                    double m2 = Double.parseDouble(mark2.getText());
+                    double m3 = Double.parseDouble(mark3.getText());
+
+                    double total = m1 + m2 + m3;
+                    double average = total / 3;
+
+                    String grade;
+                    if (average >= 80) grade = "A";
+                    else if (average >= 70) grade = "B";
+                    else if (average >= 60) grade = "C";
+                    else if (average >= 50) grade = "D";
+                    else grade = "E";
+
+                    String status = (average >= 50) ? "PASS" : "FAIL";
+
+                    resultLabel.setText("<html>Total: " + total + "<br>Average: " + average +
+                                        "<br>Grade: " + grade + "<br>Status: " + status + "</html>");
+                } catch (NumberFormatException ex) {
+                    resultLabel.setText("Please enter valid numbers!");
+                }
+            }
+        });
+
+        frame.setVisible(true);
     }
 }
