@@ -20,42 +20,92 @@ How to Run
 Open your IDE or text editor.
 Create a new file named GradeCalculator.java.
 Copy the following code into the file:
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
-public class GradeCalculator {
-
-    // Method to calculate grade based on average
-    public static String getGrade(double average) {
-        if (average >= 80) return "A";
-        else if (average >= 70) return "B";
-        else if (average >= 60) return "C";
-        else if (average >= 50) return "D";
-        else return "E";
-    }
+public class GradeCalculatorGUI {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        // Create main frame
+        JFrame frame = new JFrame("Student Grade Calculator");
+        frame.setSize(400, 350);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null); // center the window
 
-        System.out.print("Enter the number of subjects: ");
-        int subjects = scanner.nextInt();
-        double total = 0;
+        // Use a panel with GridBagLayout to center everything
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(new Color(230, 240, 255)); // light soft blueish background
+        frame.add(panel);
 
-        for (int i = 1; i <= subjects; i++) {
-            System.out.print("Enter marks for subject " + i + ": ");
-            double mark = scanner.nextDouble();
-            total += mark;
-        }
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // spacing between components
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        double average = total / subjects;
-        String grade = getGrade(average);
-        String status = (average >= 50) ? "Pass" : "Fail";
+        // Label for instructions
+        JLabel label = new JLabel("Enter marks for 3 subjects:");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2; // span two columns
+        panel.add(label, gbc);
 
-        System.out.println("\nTotal Marks: " + total);
-        System.out.println("Average Marks: " + average);
-        System.out.println("Grade: " + grade);
-        System.out.println("Status: " + status);
+        // Text fields for marks
+        JTextField mark1 = new JTextField(10);
+        gbc.gridy = 1;
+        panel.add(mark1, gbc);
 
-        scanner.close();
+        JTextField mark2 = new JTextField(10);
+        gbc.gridy = 2;
+        panel.add(mark2, gbc);
+
+        JTextField mark3 = new JTextField(10);
+        gbc.gridy = 3;
+        panel.add(mark3, gbc);
+
+        // Button to calculate grade
+        JButton calculateBtn = new JButton("Calculate");
+        calculateBtn.setBackground(new Color(0, 102, 204)); // bright blue
+        calculateBtn.setForeground(Color.WHITE); // white text
+        calculateBtn.setFocusPainted(false); // remove focus border
+        gbc.gridy = 4;
+        panel.add(calculateBtn, gbc);
+
+        // Label for results
+        JLabel resultLabel = new JLabel("");
+        resultLabel.setHorizontalAlignment(JLabel.CENTER);
+        gbc.gridy = 5;
+        panel.add(resultLabel, gbc);
+
+        // Action for button click
+        calculateBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double m1 = Double.parseDouble(mark1.getText());
+                    double m2 = Double.parseDouble(mark2.getText());
+                    double m3 = Double.parseDouble(mark3.getText());
+
+                    double total = m1 + m2 + m3;
+                    double average = total / 3;
+
+                    String grade;
+                    if (average >= 80) grade = "A";
+                    else if (average >= 70) grade = "B";
+                    else if (average >= 60) grade = "C";
+                    else if (average >= 50) grade = "D";
+                    else grade = "E";
+
+                    String status = (average >= 50) ? "PASS" : "FAIL";
+
+                    resultLabel.setText("<html>Total: " + total + "<br>Average: " + average +
+                                        "<br>Grade: " + grade + "<br>Status: " + status + "</html>");
+                } catch (NumberFormatException ex) {
+                    resultLabel.setText("Please enter valid numbers!");
+                }
+            }
+        });
+
+        frame.setVisible(true);
     }
 }
 Save the file.
